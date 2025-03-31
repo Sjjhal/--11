@@ -1,0 +1,61 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class TextEditor {
+    private static final String FILE_NAME = "textfile.txt";
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("1 - Записати до файлу\n2 - Прочитати файл\n3 - Вийти");
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Помилка: введіть число.");
+                continue;
+            }
+            
+            try {
+                if (choice == 1) {
+                    writeToFile();
+                } else if (choice == 2) {
+                    readFromFile();
+                } else if (choice == 3) {
+                    break;
+                } else {
+                    System.out.println("Некоректний вибір.");
+                }
+            } catch (IOException e) {
+                System.out.println("Помилка роботи з файлом: " + e.getMessage());
+            }
+        }
+        scanner.close();
+    }
+
+    private static void writeToFile() throws IOException {
+        System.out.println("Введіть рядок для запису у файл:");
+        String line = scanner.nextLine();
+        
+        FileWriter writer = new FileWriter(FILE_NAME, true);
+        writer.write(line + "\n");
+        writer.close();
+        
+        System.out.println("Дані записано у файл.");
+    }
+
+    private static void readFromFile() throws IOException {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) {
+            System.out.println("Файл поки що не створений.");
+            return;
+        }
+        
+        BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+        reader.close();
+    }
+}
